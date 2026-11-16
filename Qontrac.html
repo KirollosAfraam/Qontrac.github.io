@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>كونتراك للتطوير العقاري — نصنع المجتمعات منذ 1967</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg-main: #121212; --bg-secondary: #1E1E1E; --bg-card: #2A2A2A;
+    --silver: #E0E0E0; --silver-light: #F5F5F5;
+    --text: #FFFFFF; --text-muted: #A0A0A0;
+    --border: rgba(224,224,224,0.15);
+    --accent: #C9A961;
+    --green: #4CAF50;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: Arial, Helvetica, sans-serif; background: var(--bg-main); color: var(--text); overflow-x: hidden; line-height: 1.7; }
+  h1,h2,h3,.serif { font-family: Arial, Helvetica, sans-serif; font-weight: 700; }
+
+  .navbar { position: fixed; top:0; left:0; right:0; padding: 20px 60px; display:flex; justify-content:space-between; align-items:center; z-index: 1000; transition: all .4s ease; background: transparent; }
+  .navbar.scrolled { background: rgba(18,18,18,.95); backdrop-filter: blur(14px); padding: 14px 60px; border-bottom: 1px solid var(--border); }
+  .logo { display:flex; align-items:center; text-decoration:none; }
+  .logo-img { height: 44px; width:auto; object-fit:contain; transition: transform .3s; }
+  .navbar.scrolled .logo-img { height: 36px; }
+  .logo:hover .logo-img { transform: scale(1.05); }
+  .logo-fallback { display:none; font-size: 22px; font-weight:700; letter-spacing:3px; color: var(--silver); }
+  .nav-links { display:flex; gap: 28px; list-style:none; }
+  .nav-links a { color: var(--text-muted); text-decoration:none; font-size:14px; position:relative; transition: color .3s; cursor:pointer; }
+  .nav-links a::after { content:''; position:absolute; bottom:-6px; right:0; width:0; height:1px; background: var(--silver); transition: width .35s; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a:hover::after { width:100%; }
+  .menu-toggle { display:none; background:none; border:none; color:var(--silver); font-size:28px; cursor:pointer; }
+
+  section { padding: 100px 60px; position: relative; }
+  .section-head { text-align: center; margin-bottom: 60px; }
+  .section-head .kicker { display:block; color: var(--silver); letter-spacing: 6px; font-size: 12px; text-transform: uppercase; margin-bottom: 14px; }
+  .section-head h2 { font-size: clamp(32px, 5vw, 52px); color: var(--text); font-weight: 700; letter-spacing: 2px; }
+  .section-head h2 span { color: var(--silver); font-style: italic; }
+  .section-head .line { width: 60px; height: 2px; background: var(--silver); margin: 22px auto 0; opacity:.5; }
+
+  .company-hero { min-height: 100vh; position: relative; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding: 140px 24px 140px; background: radial-gradient(ellipse at top, rgba(224,224,224,.05) 0%, transparent 55%), radial-gradient(ellipse at bottom, var(--bg-secondary) 0%, var(--bg-main) 70%); overflow: hidden; }
+  .company-hero::before { content:''; position:absolute; inset:0; background: linear-gradient(135deg, transparent 40%, rgba(224,224,224,.02) 50%, transparent 60%); animation: shimmer 8s linear infinite; }
+  .company-hero > * { z-index: 1; position: relative; }
+  @keyframes shimmer { 0% { background-position: -800px 0; } 100% { background-position: 800px 0; } }
+  .hero-logo-hero { width: 100%; max-width: 420px; height: auto; object-fit: contain; margin-bottom: 24px; animation: fadeUp 1s ease both; }
+  .hero-badge { display:inline-block; padding: 8px 22px; border: 1px solid var(--border); border-radius: 50px; color: var(--silver); font-size: 12px; letter-spacing: 4px; margin-bottom: 24px; text-transform: uppercase; animation: fadeUp .9s ease both; }
+  .company-hero .title { font-size: clamp(34px, 6vw, 64px); letter-spacing: 6px; font-weight: 700; animation: fadeUp 1s ease .15s both; }
+  .company-hero .subtitle { margin-top: 10px; font-size: clamp(13px, 2vw, 18px); letter-spacing: 8px; color: var(--text-muted); text-transform: uppercase; animation: fadeUp 1s ease .3s both; }
+  .company-hero .divider { width: 90px; height: 2px; background: linear-gradient(90deg, transparent, var(--silver), transparent); margin: 30px auto; animation: fadeUp 1s ease .45s both; }
+  .company-hero .tagline { max-width: 720px; color: var(--text-muted); font-size: 17px; margin-bottom: 36px; animation: fadeUp 1s ease .6s both; }
+  .company-hero .tagline em { color: var(--silver); font-style: italic; font-weight: 700; }
+  .company-hero .tagline strong { color: var(--silver) !important; }
+  .company-hero .hero-btns { display:flex; gap: 16px; flex-wrap:wrap; justify-content:center; animation: fadeUp 1s ease .75s both; }
+  .scroll-hint { position:absolute; bottom:30px; color: var(--silver); font-size: 12px; letter-spacing: 4px; animation: bounce 2s ease-in-out infinite; }
+  .scroll-hint::after { content:''; display:block; width:1px; height:30px; margin:12px auto 0; background: linear-gradient(var(--silver), transparent); }
+  @keyframes bounce { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(8px);} }
+  @keyframes fadeUp { from { opacity:0; transform: translateY(30px);} to { opacity:1; transform: translateY(0);} }
+
+  .btn { display:inline-flex; align-items:center; gap:12px; padding: 15px 38px; background: linear-gradient(135deg, var(--silver), var(--silver-light)); color: var(--bg-main); border: none; border-radius: 50px; font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 2px; cursor:pointer; transition: all .35s ease; text-decoration:none; }
+  .btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(224,224,224,.15); }
+  .btn-outline { background: transparent; color: var(--silver); border: 1px solid var(--silver); }
+  .btn-outline:hover { background: var(--silver); color: var(--bg-main); }
+
+  .about-block { max-width: 1000px; margin: 0 auto; text-align: center; }
+  .about-block p { font-size: 17px; color: var(--text-muted); margin-bottom: 22px; line-height: 1.9; }
+  .about-block p strong { color: var(--silver); }
+  .badge-row { display:flex; gap: 16px; flex-wrap:wrap; justify-content:center; margin-top: 34px; }
+  .badge-pill { padding: 10px 22px; border: 1px solid var(--border); border-radius: 50px; color: var(--silver); font-size: 13px; letter-spacing: 1px; }
+
+  .vm-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 1000px; margin: 0 auto; }
+  .vm-card { padding: 46px 36px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card); transition: all .4s ease; }
+  .vm-card:hover { border-color: var(--silver); transform: translateY(-6px); }
+  .vm-card .vm-label { color: var(--silver); font-size: 13px; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 16px; }
+  .vm-card h3 { font-size: 24px; color: var(--text); margin-bottom: 14px; }
+  .vm-card p { color: var(--text-muted); font-size: 15px; line-height: 1.9; }
+
+  .values-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; max-width: 1100px; margin: 0 auto; }
+  .val-card { padding: 44px 30px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card); text-align: center; transition: all .4s ease; position: relative; overflow: hidden; }
+  .val-card::after { content:''; position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:0; height:2px; background: var(--silver); transition: width .4s; }
+  .val-card:hover { transform: translateY(-8px); border-color: rgba(224,224,224,.4); }
+  .val-card:hover::after { width: 60%; }
+  .val-icon { font-size: 38px; margin-bottom: 16px; display: inline-block; filter: grayscale(100%) brightness(2); }
+  .val-card h3 { color: var(--text); font-size: 20px; margin-bottom: 12px; letter-spacing: 1px; }
+  .val-card p { color: var(--text-muted); font-size: 14px; line-height: 1.8; }
+
+  .sectors-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; max-width: 1200px; margin: 0 auto; }
+  .sector-card { padding: 40px 28px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; transition: all .4s ease; }
+  .sector-card:hover { transform: translateY(-6px); border-color: var(--silver); }
+  .sector-card .icon { color: var(--silver); font-size: 26px; margin-bottom: 16px; display:inline-flex; align-items:center; justify-content:center; width: 52px; height: 52px; border:1px solid var(--border); border-radius:50%; }
+  .sector-card h3 { color: var(--text); font-size: 18px; margin-bottom: 10px; }
+  .sector-card p { color: var(--text-muted); font-size: 14px; }
+
+  .stats { background: var(--bg-secondary); padding: 70px 60px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .stats-wrap { max-width: 1200px; margin: 0 auto; display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 40px; text-align: center; }
+  .stat .num { font-size: clamp(42px, 5vw, 64px); color: var(--silver); font-weight: 700; line-height: 1; }
+  .stat .num small { font-size: .5em; color: var(--silver-light); margin-inline-start: 4px; }
+  .stat .label { margin-top: 12px; color: var(--text-muted); font-size: 13px; letter-spacing: 3px; text-transform: uppercase; }
+
+  .companies-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+  .company-card { padding: 30px 22px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg-card); text-align: center; transition: all .4s ease; }
+  .company-card:hover { transform: translateY(-4px); border-color: var(--silver); }
+  .company-card .mono { width: 56px; height: 56px; margin: 0 auto 16px; display:flex; align-items:center; justify-content:center; border: 1px solid var(--silver); border-radius: 50%; color: var(--silver); font-weight: 700; font-size: 18px; }
+  .company-card h4 { color: var(--text); font-size: 14px; margin-bottom: 6px; letter-spacing: 1px; }
+  .company-card p { color: var(--text-muted); font-size: 11px; letter-spacing: 1px; }
+  .partners-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; max-width: 1200px; margin: 0 auto; }
+  .partner-card { padding: 18px 14px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg-card); text-align: center; transition: all .3s ease; }
+  .partner-card:hover { border-color: rgba(224,224,224,.4); }
+  .partner-card h4 { color: var(--silver); font-size: 12px; font-weight: 700; letter-spacing: .5px; }
+
+  .projects-section { padding: 110px 40px; }
+  .tabs-bar { display:flex; gap: 8px; justify-content:center; flex-wrap:wrap; max-width: 680px; margin: 0 auto 40px; padding: 8px; border: 1px solid var(--border); border-radius: 60px; background: var(--bg-card); }
+  .tab-btn { flex: 1; min-width: 160px; padding: 14px 26px; border: none; border-radius: 50px; background: transparent; color: var(--text-muted); font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 2px; cursor:pointer; transition: all .35s ease; }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { background: linear-gradient(135deg, var(--silver), var(--silver-light)); color: var(--bg-main); box-shadow: 0 8px 25px rgba(224,224,224,.15); }
+  .tab-btn .tab-sub { display:block; font-size: 10px; letter-spacing: 3px; opacity: .7; margin-top: 2px; font-weight: 400; }
+
+  .tab-pane { display:none; }
+  .tab-pane.active { display:block; animation: fadeTab .6s ease; }
+  @keyframes fadeTab { from { opacity:0; transform: translateY(20px);} to { opacity:1; transform: translateY(0);} }
+
+  .project-hero { text-align:center; padding: 50px 24px 60px; background: radial-gradient(ellipse at top, rgba(224,224,224,.04) 0%, transparent 55%); border-bottom: 1px solid var(--border); margin-bottom: 10px; }
+  .project-hero-logo { width: 100%; max-width: 320px; height:auto; object-fit:contain; margin-bottom: 14px; }
+  .project-hero .proj-title { font-size: clamp(34px, 6vw, 56px); letter-spacing: 6px; }
+  .project-hero .proj-sub { margin-top: 6px; font-size: 14px; letter-spacing: 8px; color: var(--text-muted); text-transform: uppercase; }
+  .project-hero .divider { width: 80px; height: 2px; background: linear-gradient(90deg, transparent, var(--silver), transparent); margin: 24px auto; }
+  .project-hero .proj-tagline { max-width: 640px; margin: 0 auto; color: var(--text-muted); font-size: 16px; }
+
+  .tab-pane section { padding: 70px 40px; }
+  .tab-pane .section-head { margin-bottom: 50px; }
+  .tab-pane .section-head h2 { font-size: clamp(28px, 4vw, 44px); }
+
+  .location-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; max-width: 1200px; margin: 0 auto; }
+  .loc-card { padding: 32px 26px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg-card); position: relative; overflow: hidden; transition: all .4s ease; }
+  .loc-card::before { content:''; position:absolute; top:0; right:0; width: 40px; height: 40px; border-top: 1px solid var(--silver); border-right: 1px solid var(--silver); opacity:.3; transition: all .4s; }
+  .loc-card:hover { transform: translateY(-6px); border-color: rgba(224,224,224,.4); box-shadow: 0 20px 50px rgba(0,0,0,.5); }
+  .loc-card:hover::before { width:100%; height:100%; opacity:1; }
+  .loc-card .icon { color: var(--silver); font-size: 20px; margin-bottom: 14px; display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border:1px solid var(--border); border-radius:50%; }
+  .loc-card h3 { color: var(--text); font-size: 19px; margin-bottom: 8px; font-weight:700; }
+  .loc-card p { color: var(--text-muted); font-size: 14.5px; }
+
+  .design-grid { display:grid; grid-template-columns: 1.1fr 1fr; gap: 60px; max-width: 1200px; margin: 0 auto; align-items: center; }
+  .design-visual { aspect-ratio: 1; border-radius: 8px; background: linear-gradient(140deg, var(--bg-card), var(--bg-main)); border: 1px solid var(--border); position: relative; display:flex; align-items:center; justify-content:center; overflow: hidden; }
+  
+  /* --- التعديل الجديد للصور --- */
+  .design-visual::after { display: none; } /* إخفاء كلمة YARU / BEMA المفرغة */
+  .visual-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* تغطية المربع بالكامل */
+    border-radius: 8px;
+    display: block;
+  }
+  /* ------------------------- */
+
+  .design-list { display:flex; flex-direction: column; gap: 20px; }
+  .design-item { display:flex; gap: 16px; align-items: flex-start; padding-bottom: 16px; border-bottom: 1px dashed var(--border); }
+  .design-item:last-child { border-bottom: none; }
+  .design-item .bullet { flex-shrink:0; width: 34px; height: 34px; border: 1px solid var(--silver); border-radius: 50%; display:flex; align-items:center; justify-content:center; color: var(--silver); font-size: 12px; font-weight: 700; }
+  .design-item h4 { color: var(--text); font-size: 15px; margin-bottom: 4px; font-weight:700; }
+  .design-item p { color: var(--text-muted); font-size: 14px; }
+
+  .masterplan-wrap { max-width: 1100px; margin: 0 auto; position: relative; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; cursor: zoom-in; box-shadow: 0 30px 80px rgba(0,0,0,.6); background: var(--bg-card); }
+  .masterplan-wrap::before { content:''; position:absolute; inset:0; border: 1px solid var(--border); border-radius: 10px; margin: 12px; pointer-events:none; z-index: 2; }
+  .masterplan-img { width: 100%; display:block; transition: transform .7s cubic-bezier(.2,.8,.2,1); filter: grayscale(10%); }
+  .masterplan-wrap:hover .masterplan-img { transform: scale(1.04); filter: grayscale(0%); }
+  .masterplan-hint { position:absolute; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 9px 22px; background: rgba(18,18,18,.9); border: 1px solid var(--border); border-radius: 50px; color: var(--silver); font-size: 13px; letter-spacing: 1px; backdrop-filter: blur(8px); pointer-events:none; animation: pulseHint 2.5s ease-in-out infinite; }
+  @keyframes pulseHint { 0%,100% { opacity:.8; } 50% { opacity:1; box-shadow: 0 0 20px rgba(224,224,224,.15); } }
+
+  .gallery-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; max-width: 1200px; margin: 0 auto; }
+  .gallery-item { position:relative; border: 1px solid var(--border); border-radius: 8px; overflow:hidden; cursor: zoom-in; background: var(--bg-card); }
+  .gallery-item img { width: 100%; display:block; transition: transform .5s ease, filter .5s ease; filter: grayscale(20%); }
+  .gallery-item:hover img { transform: scale(1.05); filter: grayscale(0%); }
+  .gallery-label { position:absolute; bottom:0; left:0; right:0; padding: 15px; background: linear-gradient(transparent, rgba(10,10,10,.9)); color: var(--silver); text-align:center; font-weight:700; font-size: 15px; }
+
+  .lightbox { display:none; position:fixed; inset:0; background: rgba(10,10,10,.98); z-index: 9999; align-items: center; justify-content: center; cursor: zoom-out; padding: 40px; }
+  .lightbox.open { display:flex; animation: fadeIn .3s ease; }
+  .lightbox img { max-width: 95%; max-height: 92%; border-radius: 6px; box-shadow: 0 0 60px rgba(224,224,224,.1); animation: zoomIn .35s ease; }
+  .lightbox-close { position:absolute; top: 24px; right: 32px; color: var(--silver); font-size: 36px; cursor:pointer; width: 48px; height: 48px; display:flex; align-items:center; justify-content:center; border: 1px solid var(--border); border-radius: 50%; transition: all .3s; }
+  .lightbox-close:hover { background: var(--silver); color: var(--bg-main); }
+  @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+  @keyframes zoomIn { from {transform:scale(.9); opacity:0;} to {transform:scale(1); opacity:1;} }
+
+  .fac-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 22px; max-width: 1200px; margin: 0 auto; }
+  .fac-card { padding: 30px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; text-align: center; transition: all .4s ease; position: relative; overflow:hidden; }
+  .fac-card::after { content:''; position:absolute; bottom:0; left:50%; transform:translateX(-50%); width: 0; height: 2px; background: var(--silver); transition: width .4s; }
+  .fac-card:hover { transform: translateY(-8px); border-color: rgba(224,224,224,.3); }
+  .fac-card:hover::after { width: 60%; }
+  .fac-icon { font-size: 32px; margin-bottom: 14px; display:inline-block; filter: grayscale(100%) brightness(2); }
+  .fac-card h4 { color: var(--text); font-size: 16px; margin-bottom: 6px; font-weight:700; }
+  .fac-card p { color: var(--text-muted); font-size: 13.5px; }
+
+  .consultants { display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 900px; margin: 0 auto; }
+  .consult-card { text-align:center; padding: 44px 30px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg-card); transition: all .4s ease; }
+  .consult-card:hover { border-color: var(--silver); transform: translateY(-4px); }
+  .consult-card .role { color: var(--silver); font-size: 12px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 14px; }
+  .consult-card .name { font-size: 26px; color: var(--text); font-weight:700; }
+
+  .calc-wrapper { max-width: 1000px; margin: 0 auto; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 40px; box-shadow: 0 20px 50px rgba(0,0,0,.4); }
+  .calc-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; margin-bottom: 28px; }
+  .input-group label { display:block; margin-bottom: 8px; color: var(--silver); font-size: 14px; font-weight: 700; }
+  .input-group select { width: 100%; padding: 12px 16px; background: var(--bg-main); color: var(--text); border: 1px solid var(--border); border-radius: 6px; font-family: Arial, sans-serif; font-size: 15px; cursor:pointer; outline:none; transition: border-color .3s; }
+  .input-group select:focus { border-color: var(--silver); }
+  .input-group select option { background: var(--bg-card); color: var(--text); }
+  .results-box { background: var(--bg-main); border: 1px solid var(--border); border-radius: 8px; padding: 28px; display:none; animation: fadeUp .5s ease; }
+  .results-box.active { display:block; }
+  .unit-details { display:flex; gap: 12px; flex-wrap:wrap; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px dashed var(--border); }
+  .unit-details span { background: rgba(224,224,224,.1); padding: 6px 14px; border-radius: 50px; font-size: 13px; color: var(--silver); }
+  .results-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .result-item { padding: 14px; background: var(--bg-card); border-radius: 6px; border-right: 3px solid var(--silver); }
+  .result-item.full-width { grid-column: 1 / -1; border-right: 3px solid var(--accent); background: rgba(201,169,97,.08); }
+  .result-item.yield-box { border-right: 3px solid var(--green); background: rgba(76,175,80,.08); }
+  .result-label { font-size: 13px; color: var(--text-muted); margin-bottom: 5px; }
+  .result-value { font-size: 19px; font-weight: 700; color: var(--text); }
+  .result-value .currency { font-size: 13px; color: var(--silver); font-weight: 400; }
+  .result-value .discount-badge { font-size: 11px; background: var(--accent); color: var(--bg-main); padding: 2px 8px; border-radius: 4px; margin-right: 6px; font-weight: 700; }
+  .comparison-row { display:grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 10px; }
+  .comp-item { padding: 14px; border-radius: 6px; background: var(--bg-card); text-align: center; }
+  .comp-item.before { border: 1px solid var(--text-muted); }
+  .comp-item.after { border: 1px solid var(--green); background: rgba(76,175,80,.05); }
+  .comp-title { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+  .comp-val { font-size: 20px; font-weight: 700; color: var(--text); }
+  .comp-val.green { color: var(--green); }
+
+  .cta { text-align:center; padding: 110px 40px; background: var(--bg-secondary); border-top: 1px solid var(--border); }
+  .cta h2 { font-size: clamp(32px, 5vw, 54px); color: var(--text); margin-bottom: 18px; letter-spacing: 2px; font-weight:700; }
+  .cta h2 em { color: var(--silver); font-style: italic; }
+  .cta p { color: var(--text-muted); max-width: 560px; margin: 0 auto 36px; font-size: 16px; }
+  .cta-btns { display:flex; gap: 16px; justify-content:center; flex-wrap:wrap; }
+
+  .footer { text-align:center; padding: 50px 20px 40px; color: var(--text-muted); font-size: 13px; border-top: 1px solid var(--border); letter-spacing: 1px; }
+  .footer strong { color: var(--silver); font-weight:700; }
+  .footer-logo-wrap { margin-top: 24px; display:flex; justify-content:center; }
+  .footer-logo { height: 44px; width:auto; object-fit:contain; opacity: 0.85; }
+
+  .reveal { opacity: 0; transform: translateY(40px); transition: all .8s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+  .reveal[data-delay="1"]{ transition-delay:.1s;} .reveal[data-delay="2"]{ transition-delay:.2s;}
+  .reveal[data-delay="3"]{ transition-delay:.3s;} .reveal[data-delay="4"]{ transition-delay:.4s;}
+
+  @media (max-width: 900px) {
+    .navbar { padding: 16px 24px; }
+    .navbar.scrolled { padding: 12px 24px; }
+    .menu-toggle { display:block; }
+    .nav-links { position:fixed; top:0; right:-100%; width: 70%; max-width: 300px; height: 100vh; background: rgba(18,18,18,.98); flex-direction: column; padding: 100px 30px; gap: 22px; transition: right .4s ease; border-left: 1px solid var(--border); z-index: 999; }
+    .nav-links.open { right: 0; }
+    section, .projects-section, .tab-pane section { padding: 70px 24px; }
+    .stats { padding: 50px 24px; }
+    .vm-grid, .design-grid, .results-grid, .comparison-row { grid-template-columns: 1fr; }
+    .design-visual { max-width: 320px; margin: 0 auto; }
+    .lightbox { padding: 16px; }
+    .lightbox-close { top: 12px; right: 12px; }
+    .calc-wrapper { padding: 22px; }
+    .tab-btn { min-width: 140px; }
+    .hero-logo-hero { max-width: 300px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAVBAR ============ -->
+<nav class="navbar" id="navbar">
+  <a href="#home" class="logo">
+    <img src="https://lh3.googleusercontent.com/d/1jKel5of0px_-D52aW83I7FXKw_fhGdAl" alt="Qontrac Logo" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <span class="logo-fallback">QONTRAC</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a data-scroll="#about">الشركة</a></li>
+    <li><a data-scroll="#vision">الرؤية</a></li>
+    <li><a data-scroll="#values">القيم</a></li>
+    <li><a data-scroll="#sectors">القطاعات</a></li>
+    <li><a data-scroll="#companies">الشركات</a></li>
+    <li><a data-scroll="#projects" data-tab="yaru">YARU</a></li>
+    <li><a data-scroll="#projects" data-tab="bema">Bema</a></li>
+    <li><a data-scroll="#contact">تواصل</a></li>
+  </ul>
+  <button class="menu-toggle" id="menuToggle">☰</button>
+</nav>
+
+<!-- ============ COMPANY HERO ============ -->
+<header class="company-hero" id="home">
+  <span class="hero-badge">منذ 1967 · مقاول درجة أولى</span>
+  <img src="https://lh3.googleusercontent.com/d/1jKel5of0px_-D52aW83I7FXKw_fhGdAl" alt="Qontrac Logo" class="hero-logo-hero" onerror="this.style.display='none';document.getElementById('heroLogoFallback').style.display='block';">
+  <h1 id="heroLogoFallback" class="title" style="display:none;">QONTRAC</h1>
+  <div class="subtitle">للتطوير العقاري</div>
+  <div class="divider"></div>
+  <p class="tagline">بخبرة تتجاوز <strong>55 عاماً</strong> في التطوير العقاري، نحن لا نبني العقارات فقط — <em>بل نصنع المجتمعات</em>.</p>
+  <div class="hero-btns">
+    <a class="btn" data-scroll="#projects" data-tab="yaru">استكشف YARU</a>
+    <a class="btn btn-outline" data-scroll="#projects" data-tab="bema">استكشف Bema</a>
+  </div>
+  <div class="scroll-hint">SCROLL</div>
+</header>
+
+<!-- ============ ABOUT ============ -->
+<section id="about">
+  <div class="section-head reveal">
+    <span class="kicker">عن الشركة</span>
+    <h2>من <span>نحن</span></h2>
+    <div class="line"></div>
+  </div>
+  <div class="about-block">
+    <p class="reveal">كونتراك شركة رائدة في قطاع البنية التحتية والإنشاءات المتكاملة في مصر، بخبرة تتجاوز <strong>55 عاماً</strong>. نحمل التصنيف المرموق <strong>«الدرجة الأولى»</strong> من الاتحاد المصري لمقاولي التشييد والبناء — شهادة على تميزنا وتفانينا في هذا المجال.</p>
+    <p class="reveal" data-delay="1">كجزء من <strong>مجموعة شركات أولاد عبدالله</strong>، نحن لسنا مجرد بنّائين؛ بل أصحاب رؤية مكرّسون لتشكيل مستقبل مصر. التزامنا بالتميز والابتكار يدفعنا لتقديم مشاريع تلبي أعلى معايير الجودة والسلامة، مع بناء شراكات تدوم مدى الحياة.</p>
+    <p class="reveal" data-delay="2">تشمل محفظتنا الواسعة أعمال الطرق الاستراتيجية، ومشروعات البنية التحتية القومية، وأنظمة المرافق واسعة النطاق، والمشروعات العملاقة في المدن الجديدة — مما يعزز مكانة كونتراك كحجر أساس في تنمية مصر.</p>
+    <div class="badge-row reveal" data-delay="3">
+      <span class="badge-pill">مقاول درجة أولى</span>
+      <span class="badge-pill">عضو الاتحاد المصري</span>
+      <span class="badge-pill">بنية تحتية · تطوير عقاري</span>
+      <span class="badge-pill">منذ 1967</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VISION & MISSION ============ -->
+<section id="vision" style="background: var(--bg-secondary);">
+  <div class="section-head reveal">
+    <span class="kicker">الرؤية والرسالة</span>
+    <h2>رؤيتنا <span>ورسالتنا</span></h2>
+    <div class="line"></div>
+  </div>
+  <div class="vm-grid">
+    <div class="vm-card reveal">
+      <div class="vm-label">الرسالة</div>
+      <h3>رسالتنا</h3>
+      <p>نلتزم بالحفاظ على الجودة والسلامة والمحافظة على البيئة. هدفنا هو تقديم خدمات ومنتجات عالية الجودة تلبي احتياجاتكم بفعالية.</p>
+    </div>
+    <div class="vm-card reveal" data-delay="1">
+      <div class="vm-label">الرؤية</div>
+      <h3>رؤيتنا</h3>
+      <p>نسعى لأن نصبح واحدة من الشركات الرائدة في مجال الإنشاءات في الشرق الأوسط وأفريقيا في المستقبل القريب.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VALUES ============ -->
+<section id="values">
+  <div class="section-head reveal">
+    <span class="kicker">القيم الأساسية</span>
+    <h2>قيمنا <span>الأساسية</span></h2>
+    <div class="line"></div>
+  </div>
+  <div class="values-grid">
+    <div class="val-card reveal" data-delay="1">
+      <div class="val-icon">🛡️</div>
+      <h3>الشفافية</h3>
+      <p>نحرص على تطابق أقوالنا مع أفعالنا، ونعمل بجد لنكسب سمعتنا كل يوم. نلتزم بمبادئنا وقيمنا حتى لا يُشكَّك في نزاهتنا.</p>
+    </div>
+    <div class="val-card reveal" data-delay="2">
+      <div class="val-icon">⚖️</div>
+      <h3>السلامة</h3>
+      <p>نضع السلامة في مقدمة أولوياتنا في كل جانب من جوانب عملنا، ونسعى لبيئة خالية من الحوادث.</p>
+    </div>
+    <div class="val-card reveal" data-delay="3">
+      <div class="val-icon">🤝</div>
+      <h3>الثقة</h3>
+      <p>نبني علاقات قائمة على الثقة، ونعزز الاستقلالية والانفتاح والإخلاص داخل مؤسستنا.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTORS ============ -->
+<section id="sectors" style="background: var(--bg-secondary);">
+  <div class="section-head reveal">
+    <span class="kicker">خبراتنا</span>
+    <h2>قطاعات <span>الخبرة</span></h2>
+    <div class="line"></div>
+  </div>
+  <div class="sectors-grid">
+    <div class="sector-card reveal" data-delay="1">
+      <div class="icon">🏗️</div>
+      <h3>البنية التحتية والأعمال المتكاملة</h3>
+      <p>نبني العمود الفقري للمجتمعات بتصميمات مستدامة.</p>
+    </div>
+    <div class="sector-card reveal" data-delay="2">
+      <div class="icon">🛤️</div>
+      <h3>الصناعة والنقل</h3>
+      <p>من الطرق والسكك الحديدية إلى المطارات والكباري — ندفع عجلة النمو الاقتصادي.</p>
+    </div>
+    <div class="sector-card reveal" data-delay="3">
+      <div class="icon">💧</div>
+      <h3>أنظمة المياه والصرف الصحي</h3>
+      <p>نقدم حلولاً موثوقة لإدارة المياه والصرف.</p>
+    </div>
+    <div class="sector-card reveal" data-delay="1">
+      <div class="icon">⚡</div>
+      <h3>الكهروميكانيكية والإلكترونية</h3>
+      <p>نحدّث البنية التحتية بأنظمة وشبكات متقدمة.</p>
+    </div>
+    <div class="sector-card reveal" data-delay="2">
+      <div class="icon">🔧</div>
+      <h3>الصيانة الشاملة</h3>
+      <p>نضمن استدامة البنية التحتية الحيوية كالكباري والأنفاق والمحطات.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STATS ============ -->
+<div class="stats">
+  <div class="stats-wrap">
+    <div class="stat reveal"><div class="num"><span data-count="55">0</span><small>+</small></div><div class="label">سنة خبرة</div></div>
+    <div class="stat reveal" data-delay="1"><div class="num"><span data-count="9">0</span></div><div class="label">شركات المجموعة</div></div>
+    <div class="stat reveal" data-delay="2"><div class="num"><span data-count="13">0</span><small>+</small></div><div class="label">شركاء استراتيجيون</div></div>
+    <div class="stat reveal" data-delay="3"><div class="num">1967</div><div class="label">سنة التأسيس</div></div>
+  </div>
+</div>
+
+<!-- ============ COMPANIES ============ -->
+<section id="companies">
+  <div class="section-head reveal">
+    <span class="kicker">شركاتنا</span>
+    <h2>شركات <span>المجموعة</span></h2>
+    <div class="line"></div>
+  </div>
+  <div class="companies-grid">
+    <div class="company-card reveal" data-delay="1"><div class="mono">V</div><h4>VIACOM للإنشاءات</h4><p>إنشاءات</p></div>
+    <div class="company-card reveal" data-delay="2"><div class="mono">HA</div><h4>HA للتصميم</h4><p>تصميم</p></div>
+    <div class="company-card reveal" data-delay="3"><div class="mono">R</div><h4>RITAJ</h4><p>تطوير عمراني</p></div>
+    <div class="company-card reveal" data-delay="1"><div class="mono">M</div><h4>مشاعر</h4><p>تطوير عمراني</p></div>
+    <div class="company-card reveal" data-delay="2"><div class="mono">RKD</div><h4>RKD</h4><p>استثمار عقاري</p></div>
+    <div class="company-card reveal" data-delay="3"><div class="mono">E</div><h4>Engineering</h4><p>استثمار ومقاولات</p></div>
+    <div class="company-card reveal" data-delay="1"><div class="mono">EL</div><h4>ELESRAA</h4><p>إنشاءات</p></div>
+    <div class="company-card reveal" data-delay="2"><div class="mono">KM</div><h4>Kayan MISR</h4><p>تطوير واستثمار</p></div>
+    <div class="company-card reveal" data-delay="3"><div class="mono">AC</div><h4>الشركة العربية</h4><p>بناء وإنشاءات</p></div>
+  </div>
+</section>
+
+<!-- ============ PARTNERS ============ -->
+<section id="partners" style="background: var(--bg-secondary);">
+  <div class="section-head reveal">
+    <span class="kicker">تعاوناتنا</span>
+    <h2>شركاء <span>النجاح</span></h2>
+    <div class="line"></div>
+  </div>
+  <div class="partners-grid">
+    <div class="partner-card reveal" data-delay="1"><h4>جدة للطوب</h4></div>
+    <div class="partner-card reveal" data-delay="2"><h4>مصر دبي</h4></div>
+    <div class="partner-card reveal" data-delay="3"><h4>النعيم</h4></div>
+    <div class="partner-card reveal" data-delay="1"><h4>فيوتشر</h4></div>
+    <div class="partner-card reveal" data-delay="2"><h4>We Hat</h4></div>
+    <div class="partner-card reveal" data-delay="3"><h4>SAMCO</h4></div>
+    <div class="partner-card reveal" data-delay="1"><h4>Wynn Landscapes</h4></div>
+    <div class="partner-card reveal" data-delay="2"><h4>Hyde Park</h4></div>
+    <div class="partner-card reveal" data-delay="3"><h4>The Creative Zone</h4></div>
+    <div class="partner-card reveal" data-delay="1"><h4>مطار القاهرة الدولي</h4></div>
+    <div class="partner-card reveal" data-delay="2"><h4>Great Shield</h4></div>
+    <div class="partner-card reveal" data-delay="3"><h4>مصر</h4></div>
+  </div>
+</section>
+
+<!-- ============ PROJECTS / TABS ============ -->
+<section id="projects" class="projects-section">
+  <div class="section-head reveal">
+    <span class="kicker">مشاريعنا</span>
+    <h2>مشاريعنا <span>الحالية</span></h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="tabs-bar reveal">
+    <button class="tab-btn active" data-tab-btn="yaru">YARU<span class="tab-sub">RESIDENCE · R8</span></button>
+    <button class="tab-btn" data-tab-btn="bema">BEMA<span class="tab-sub">MALL · MU23</span></button>
+  </div>
+
+  <!-- ===== TAB: YARU ===== -->
+  <div class="tab-pane active" id="tab-yaru">
+
+    <div class="project-hero">
+      <span class="hero-badge">إطلاق جديد · R8</span>
+      <img src="https://lh3.googleusercontent.com/d/17NVDnvaG3odV7ryaw7lRiyz7LDOR4q1v" alt="YARU Logo" class="project-hero-logo" onerror="this.style.display='none';document.getElementById('yaruFallback').style.display='block';">
+      <h1 id="yaruFallback" class="proj-title" style="display:none;">YARU</h1>
+      <div class="proj-sub">RESIDENCE</div>
+      <div class="divider"></div>
+      <p class="proj-tagline">مجتمع سكني راقٍ على مساحة 37 فدان في قلب R8، بتصميم معماري استثنائي وإطلالات مباشرة على المحور المركزي والنهر الأخضر.</p>
+    </div>
+
+    <section>
+      <div class="section-head reveal">
+        <span class="kicker">الموقع</span>
+        <h2>الموقع <span>المثالي</span></h2>
+        <div class="line"></div>
+      </div>
+      <div class="location-grid">
+        <div class="loc-card reveal" data-delay="1"><span class="icon">◈</span><h3>R8 – Plot H2</h3><p>قطعة أرض متميزة داخل أرقى نطاقات R8 بموقع استراتيجي فريد.</p></div>
+        <div class="loc-card reveal" data-delay="2"><span class="icon">➤</span><h3>إطلالة على المحور المركزي</h3><p>إطلالة مباشرة على المحور المركزي، أحد أهم الشرايين الحيوية.</p></div>
+        <div class="loc-card reveal" data-delay="3"><span class="icon">❈</span><h3>النهر الأخضر وبن زايد</h3><p>فيو مباشر على النهر الأخضر ومحور بن زايد الجنوبي.</p></div>
+        <div class="loc-card reveal" data-delay="4"><span class="icon">★</span><h3>الحي الدبلوماسي</h3><p>ثالث نمرة من الحي الدبلوماسي — جيرة راقية واستثنائية.</p></div>
+      </div>
+    </section>
+
+    <div class="stats">
+      <div class="stats-wrap">
+        <div class="stat reveal"><div class="num"><span data-count="37">0</span><small>فدان</small></div><div class="label">المساحة الإجمالية</div></div>
+        <div class="stat reveal" data-delay="1"><div class="num"><span data-count="19.5">0</span><small>%</small></div><div class="label">نسبة البناء</div></div>
+        <div class="stat reveal" data-delay="2"><div class="num"><span data-count="60">0</span><small>%</small></div><div class="label">فيلات</div></div>
+        <div class="stat reveal" data-delay="3"><div class="num"><span data-count="40">0</span><small>%</small></div><div class="label">عمارات</div></div>
+      </div>
+    </div>
+
+    <section>
+      <div class="section-head reveal">
+        <span class="kicker">التصميم</span>
+        <h2>التصميم <span>والمساحات</span></h2>
+        <div class="line"></div>
+      </div>
+      <div class="design-grid">
+        <!-- التعديل: صورة YARU الجديدة -->
+        <div class="design-visual yaru reveal">
+          <img src="https://lh3.googleusercontent.com/d/1C0WKS-28gpZ_k8RlKuCGiij5JTicZon6" alt="YARU Design" class="visual-img">
+        </div>
+        <div class="design-list">
+          <div class="design-item reveal" data-delay="1"><div class="bullet">01</div><div><h4>كمبوند 37 فدان</h4><p>مساحة إجمالية واسعة مع تخطيط عمراني مدروس.</p></div></div>
+          <div class="design-item reveal" data-delay="2"><div class="bullet">02</div><div><h4>نسبة بناء 19.5%</h4><p>أكبر مساحة خضراء ومفتوحة لرفاهية السكان.</p></div></div>
+          <div class="design-item reveal" data-delay="3"><div class="bullet">03</div><div><h4>60% فيلات – 40% عمارات</h4><p>تنوع سكني يوازن بين الخصوصية والحياة المجتمعية.</p></div></div>
+          <div class="design-item reveal" data-delay="4"><div class="bullet">04</div><div><h4>ڤيلات متنوعة</h4><p>ستاند ألون – تاون هاوس – توين هاوس (أرضي · أول · رووف).</p></div></div>
+          <div class="design-item reveal" data-delay="4"><div class="bullet">05</div><div><h4>عمارات</h4><p>أرضي + 8 أدوار بتصميم عصري وإطلالات بانورامية.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section style="background: var(--bg-secondary);">
+      <div class="section-head reveal">
+        <span class="kicker">الماستر بلان</span>
+        <h2>الماستر <span>بلان</span></h2>
+        <div class="line"></div>
+      </div>
+      <div class="masterplan-wrap reveal">
+        <img src="https://lh3.googleusercontent.com/d/1DKV2lKdbLDJ9E7wVjk9UxPDwyUZzaVlp" alt="YARU Master Plan" class="masterplan-img" onclick="openLightbox(this.src)" onerror="this.src='https://placehold.co/1200x800/1E1E1E/E0E0E0?text=Master+Plan';this.onerror=null;">
+        <div class="masterplan-hint">🔍 اضغط على الصورة للتكبير</div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head reveal">
+        <span class="kicker">المرافق</span>
+        <h2>المرافق <span>والخدمات</span></h2>
+        <div class="line"></div>
+      </div>
+      <div class="fac-grid">
+        <div class="fac-card reveal" data-delay="1"><div class="fac-icon">🏛️</div><h4>كلوب هاوس</h4><p>على مساحة 1.5 فدان</p></div>
+        <div class="fac-card reveal" data-delay="2"><div class="fac-icon">🛍️</div><h4>ستريب مول</h4><p>2 فدان · أرضي + دورين</p></div>
+        <div class="fac-card reveal" data-delay="3"><div class="fac-icon">🏊</div><h4>3 مسابح</h4><p>ثلاثة مسابح بتصميمات مميزة</p></div>
+        <div class="fac-card reveal" data-delay="1"><div class="fac-icon">🎠</div><h4>منطقة أطفال</h4><p>منطقة ألعاب آمنة للأطفال</p></div>
+        <div class="fac-card reveal" data-delay="2"><div class="fac-icon">🧘</div><h4>حديقة التأمل</h4><p>حديقة للتأمل والاسترخاء</p></div>
+        <div class="fac-card reveal" data-delay="3"><div class="fac-icon">💧</div><h4>مسطحات مائية</h4><p>بحيرات ونوافير مائية</p></div>
+        <div class="fac-card reveal" data-delay="1"><div class="fac-icon">🌿</div><h4>ممشى</h4><p>ممشى بطول الكمبوند</p></div>
+        <div class="fac-card reveal" data-delay="2"><div class="fac-icon">🏃</div><h4>مسار جري</h4><p>مسار للجري والرياضة</p></div>
+      </div>
+    </section>
+
+    <section style="background: var(--bg-secondary);">
+      <div class="section-head reveal">
+        <span class="kicker">الاستشاريون</span>
+        <h2>الاستشاريون <span>والشركاء</span></h2>
+        <div class="line"></div>
+      </div>
+      <div class="consultants">
+        <div class="consult-card reveal" data-delay="1"><div class="role">الاستشاري الهندسي</div><div class="name">م. هشام علاء</div></div>
+        <div class="consult-card reveal" data-delay="2"><div class="role">الاستشاري التنفيذي</div><div class="name">البهيري</div></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head reveal">
+        <span class="kicker">حاسبة التمويل</span>
+        <h2>حاسبة <span>التمويل</span></h2>
+        <div class="line"></div>
+      </div>
+      <div class="calc-wrapper reveal">
+        <div class="calc-grid">
+          <div class="input-group">
+            <label for="yaruUnitSelect">اختر الوحدة</label>
+            <select id="yaruUnitSelect"><option value="" disabled selected>-- اختر الكود --</option></select>
+          </div>
+          <div class="input-group">
+            <label for="yaruDpSelect">نسبة المقدم</label>
+            <select id="yaruDpSelect">
+              <option value="0.10">10%</option><option value="0.15">15%</option>
+              <option value="0.20">20%</option><option value="0.25">25%</option>
+              <option value="0.30">30%</option><option value="0.35">35%</option>
+              <option value="0.40">40%</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="yaruYearsSelect">عدد السنوات</label>
+            <select id="yaruYearsSelect">
+              <option value="10">10 سنوات</option><option value="9">9 سنوات</option>
+              <option value="8">8 سنوات</option><option value="7">7 سنوات</option>
+              <option value="6">6 سنوات</option><option value="5">5 سنوات</option>
+            </select>
+          </div>
+        </div>
+        <div class="results-box" id="yaruResultsBox">
+          <div class="unit-details" id="yaruUnitDetails"></div>
+          <div class="results-grid">
+            <div class="result-item"><div class="result-label">سعر الوحدة الأساسي</div><div class="result-value" id="yaruBasePrice">0 <span class="currency">ج.م</span></div></div>
+            <div class="result-item full-width"><div class="result-label">السعر بعد الخصم <span class="discount-badge" id="yaruDiscountBadge">0%</span></div><div class="result-value" id="yaruFinalPrice">0 <span class="currency">ج.م</span></div></div>
+            <div class="result-item"><div class="result-label">قيمة المقدم</div><div class="result-value" id="yaruDpAmount">0 <span class="currency">ج.م</span></div></div>
+            <div class="result-item"><div class="result-label">قيمة القسط (ربع سنوي)</div><div class="result-value" id="yaruInstallmentAmount">0 <span class="currency">ج.م</span></div></div>
+            <div class="result-item full-width"><div class="result-label">عدد الأقساط</div><div class="result-value" id="yaruNumInstallments">0 قسط</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ===== TAB: BEMA ===== -->
+  <div class="tab-pane" id="tab-bema">
+
+    <div class="project-hero">
+      <span class="hero-badge">تجاري وإداري</span>
+      <img src="https://lh3.googleusercontent.com/d/1OAy07dnyUuUWTtzZuM20-srqKBghK_vW" alt="Bema Logo" class="project-hero-logo" onerror="this.style.display='none';document.getElementById('bemaFallback').style.display='block';">
+      <h1 id="bemaFallback" class="proj-title" style="display:none;">BEMA</h1>
+      <div class="proj-sub">MALL</div>
+      <div class="divider"></div>
+      <p class="proj-tagline">مول تجاري وإداري فاخر على مساحة 3500 متر في قلب MU23، مع إدارة تشغيل KAD لضمان أعلى عائد استثماري من اليوم الأول.</p>
+    </div>
+
+    <section>
+      <div class="section-head reveal">
+        <span class="kicker">الموقع</span>
+        <h2>الموقع <span>الاستراتيجي</span></h2>
+        <div class="line"></div>
+      </div>
+      <div class="location-grid">
+        <div class="loc-card reveal" data-delay="1"><span class="icon">📍</span><h3>MU23</h3><p>موقع متميز في قلب المنطقة الاستثمارية.</p></div>
+        <div class="loc-card reveal" data-delay="2"><span class="icon">➤</span><h3>محور الأمل والوزارات</h3><p>ثاني نمرة من محور الأمل وثاني نمرة من محور الوزارات.</p></div>
+        <div class="loc-card reveal" data-delay="3"><span class="icon">🏫</span><h3>أمام المدارس الدولية</h3><p>في مواجهة مباشرة لمدرستي الرواد الدولية وSeven Pillars.</p></div>
+      </div>
+    </section>
+
+    <div class="stats">
+      <div class="stats-wrap">
+        <div class="stat reveal"><div class="num"><span data-count="3500">0</span><small>م²</small></div><div class="label">المساحة الإجمالية</div></div>
+        <div class="stat reveal" data-delay="1"><div class="num">G+9</div><div class="label">الأدوار</div></div>
+        <div class="stat reveal" data-delay="2"><div class="num"><span data-count="100">0</span><small>%</small></div><div class="label">عائد على المقدم</div></div>
+        <div class="stat reveal" data-delay="3"><div class="num"><span data-count="20">0</span><small>-30%</small></div><div class="label">عائد إيجاري</div></div>
+      </div>
+    </div>
+
+    <section>
+      <div class="section-head reveal">
+        <span class="kicker">التصميم</span>
+        <h2>التصميم <span>والتقسيم</span></h2>
+        <div class="line"></div>
+      </div>
+      <div class="design-grid">
+        <!-- التعديل: صورة Bema الجديدة -->
+        <div class="design-visual bema reveal">
+          <img src="https://lh3.googleusercontent.com/d/1h3HjCGgNexjZI0jxtGkG4OVTlYKS1nry" alt="Bema Design" class="visual-img">
+        </div>
+        <div class="design-list">
+          <div class="design-item reveal" data-delay="1"><div class="bullet">01</div><div><h4>مساحة 3500 م²</h4><p>مول متكامل بمساحة إجمالية واسعة.</p></div></div>
+          <div class="design-item reveal" data-delay="2"><div class="bullet">02</div><div><h4>G+9</h4><p>دور أرضي + 9 أدوار، بالإضافة إلى 2 دور جراج.</p></div></div>
+          <div class="design-item reveal" data-delay="3"><div class="bullet">03</div><div><h4>تجاري وإداري</h4><p>الدور الأرضي والأول تجاري، ومن الثاني للتاسع إداري.</p></div></div>
+          <div class="design-item reveal" data-delay="4"><div class="bullet">04</div><div><h4>إدارة KAD</h4><p>أقوى شركات الإدارة والتشغيل لضمان أعلى عائد.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section style="background: var(--bg-secondary);">
+      <div class="section-head reveal">
+        <span class="kicker">الماستر بلان</span>
+        <h2>مخطط <span>الأدوار</span></h2>
+        <div class="line"></div>
+      </div>
+      <div class="gallery-grid reveal">
+        <div class="gallery-item" onclick="openLightbox(this.querySelector('img').src)">
+          <img src="https://lh3.googleusercontent.com/d/1MJrMl1rMJYZ497BtahtYZKBxYg7VPAss" alt="Ground Floor" onerror="this.src='https://placehold.co/600x400/1E1E1E/E0E0E0?text=Ground+Floor';this.onerror=null;">
+          <div class="gallery-label">الدور الأرضي - تجاري</div>
+        </div>
+        <div class="gallery-item" onclick="openLightbox(this.querySelector('img').src)">
+          <img src="https://lh3.googleusercontent.com/d/1OOS3Rrm0TTxP5faTWFIBsRX6BYlFMkcG" alt="First Floor" onerror="this.src='https://placehold.co/600x400/1E1E1E/E0E0E0?text=First+Floor';this.onerror=null;">
+          <div class="gallery-label">الدور الأول - تجاري</div>
+        </div>
+        <div class="gallery-item" onclick="openLightbox(this.querySelector('img').src)">
+          <img src="https://lh3.googleusercontent.com/d/1FWIyE1QQKlatxLAS1SrVhwRc8mp0KCEE" alt="Typical Floor" onerror="this.src='https://placehold.co/600x400/1E1E1E/E0E0E0?text=Typical+Floor';this.onerror=null;">
+          <div class="gallery-label">الدور النموذجي - إداري</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head reveal">
+        <span class="kicker">مميزات استثمارية</span>
+        <h2>مميزات <span>استثمارية</span></h2>
+        <div class="line"></div>
+      </div>
+      <div class="fac-grid">
+        <div class="fac-card reveal" data-delay="1"><div class="fac-icon">💰</div><h4>100% عائد على المقدم</h4><p>استرداد كامل للمقدم الخاص بك.</p></div>
+        <div class="fac-card reveal" data-delay="2"><div class="fac-icon">📈</div><h4>إيجار إلزامي 20-30%</h4><p>عائد سنوي من إجمالي سعر الوحدة لمدة 9 سنوات.</p></div>
+        <div class="fac-card reveal" data-delay="3"><div class="fac-icon">🤝</div><h4>إدارة KAD</h4><p>شركة إدارة وتشغيل عالمية لضمان نجاح المشروع.</p></div>
+        <div class="fac-card reveal" data-delay="1"><div class="fac-icon">🏢</div><h4>جراج واسع</h4><p>عدد 2 دور جراج لخدمة رواد المول.</p></div>
+        <div class="fac-card reveal" data-delay="2"><div class="fac-icon">💳</div><h4>أنظمة سداد مرنة</h4><p>مقدمات تبدأ من 10% وتسهيلات تصل إلى 10 سنوات.</p></div>
+      </div>
+    </section>
+
+    <section style="background: var(--bg-secondary);">
+      <div class="section-head reveal">
+        <span class="kicker">الاستشاريون</span>
+        <h2>الاستشاريون <span>والشركاء</span></h2>
+        <div class="line"></div>
+      </div>
+      <div class="consultants">
+        <div class="consult-card reveal" data-delay="1"><div class="role">الاستشاري الهندسي</div><div class="name">OKO Plan</div></div>
+        <div class="consult-card reveal" data-delay="2"><div class="role">الاستشاري التنفيذي</div><div class="name">البهيري</div></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head reveal">
+        <span class="kicker">حاسبة التمويل والعائد</span>
+        <h2>حاسبة <span>التمويل والعائد</span></h2>
+        <div class="line"></div>
+      </div>
+      <div class="calc-wrapper reveal">
+        <div class="calc-grid">
+          <div class="input-group">
+            <label for="bemaUnitSelect">اختر الوحدة</label>
+            <select id="bemaUnitSelect"><option value="" disabled selected>-- اختر الكود --</option></select>
+          </div>
+          <div class="input-group">
+            <label for="bemaDpSelect">نسبة المقدم</label>
+            <select id="bemaDpSelect">
+              <option value="0.10">10%</option><option value="0.15">15%</option>
+              <option value="0.20">20%</option><option value="0.25">25%</option>
+              <option value="0.30">30%</option><option value="0.35">35%</option>
+              <option value="0.40">40%</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="bemaYearsSelect">عدد السنوات</label>
+            <select id="bemaYearsSelect">
+              <option value="10">10 سنوات</option><option value="9">9 سنوات</option>
+              <option value="8">8 سنوات</option><option value="7">7 سنوات</option>
+              <option value="6">6 سنوات</option><option value="5">5 سنوات</option>
+            </select>
+          </div>
+        </div>
+        <div class="results-box" id="bemaResultsBox">
+          <div class="unit-details" id="bemaUnitDetails"></div>
+          <div class="results-grid" style="margin-bottom: 18px;">
+            <div class="result-item"><div class="result-label">سعر الوحدة الأساسي</div><div class="result-value" id="bemaBasePrice">0 <span class="currency">ج.م</span></div></div>
+            <div class="result-item"><div class="result-label">قيمة المقدم</div><div class="result-value" id="bemaDpAmount">0 <span class="currency">ج.م</span></div></div>
+            <div class="result-item full-width"><div class="result-label">السعر بعد خصم نظام السداد <span class="discount-badge" id="bemaDiscountBadge">0%</span></div><div class="result-value" id="bemaFinalPrice">0 <span class="currency">ج.م</span></div></div>
+          </div>
+          <div class="result-label" style="text-align:center; margin-bottom: 10px; font-weight:bold; color:var(--silver);">مقارنة الأقساط (قبل وبعد خصم العائد 10%)</div>
+          <div class="comparison-row">
+            <div class="comp-item before"><div class="comp-title">قبل خصم العائد</div><div class="comp-val" id="bemaInstallmentBefore">0 <span class="currency">ج.م</span></div></div>
+            <div class="comp-item after"><div class="comp-title">بعد خصم العائد (10%)</div><div class="comp-val green" id="bemaInstallmentAfter">0 <span class="currency">ج.م</span></div></div>
+          </div>
+          <div class="results-grid" style="margin-top: 18px;">
+            <div class="result-item yield-box"><div class="result-label">إجمالي العائد المخصوم (10%)</div><div class="result-value" id="bemaTotalYield">0 <span class="currency">ج.م</span></div></div>
+            <div class="result-item yield-box"><div class="result-label">عدد الأقساط (ربع سنوي)</div><div class="result-value" id="bemaNumInstallments">0 قسط</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta" id="contact">
+  <h2>ابدأ <em>رحلتك</em> مع كونتراك</h2>
+  <p>اكتشف مشاريعنا الحالية وتواصل معنا اليوم لحجز وحدتك في YARU Residence أو Bema Mall.</p>
+  <div class="cta-btns">
+    <a href="https://wa.me/201012333388" target="_blank" class="btn">📞 تواصل معنا</a>
+    <a class="btn btn-outline" data-scroll="#projects" data-tab="yaru">استكشف YARU</a>
+    <a class="btn btn-outline" data-scroll="#projects" data-tab="bema">استكشف Bema</a>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div>© 2026 <strong>كونتراك للتطوير العقاري</strong> · جميع الحقوق محفوظة.</div>
+  <div style="margin-top: 8px;">نصنع المجتمعات منذ 1967</div>
+  <div class="footer-logo-wrap">
+    <img src="https://lh3.googleusercontent.com/d/1jKel5of0px_-D52aW83I7FXKw_fhGdAl" alt="Qontrac Logo" class="footer-logo" onerror="this.style.display='none'">
+  </div>
+</footer>
+
+<!-- ============ LIGHTBOX ============ -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <span class="lightbox-close">✕</span>
+  <img src="" alt="Preview" id="lightboxImg">
+</div>
+
+<script>
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 60));
+
+const menuToggle = document.getElementById('menuToggle');
+const navLinks = document.getElementById('navLinks');
+menuToggle.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+  menuToggle.textContent = navLinks.classList.contains('open') ? '✕' : '☰';
+});
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tabBtn === name));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === 'tab-' + name));
+  setTimeout(() => {
+    document.querySelectorAll('#tab-' + name + ' .reveal').forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('in');
+    });
+  }, 50);
+}
+
+document.querySelectorAll('[data-scroll]').forEach(a => {
+  a.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(a.dataset.scroll);
+    if (!target) return;
+    if (a.dataset.tab) switchTab(a.dataset.tab);
+    setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    navLinks.classList.remove('open');
+    menuToggle.textContent = '☰';
+  });
+});
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchTab(btn.dataset.tabBtn));
+});
+
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); revealObserver.unobserve(e.target); }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+const counters = document.querySelectorAll('[data-count]');
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target;
+    const target = parseFloat(el.dataset.count);
+    const decimals = (target % 1 !== 0) ? 1 : 0;
+    const duration = 1500;
+    const start = performance.now();
+    const step = (now) => {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = (target * eased).toFixed(decimals);
+      if (p < 1) requestAnimationFrame(step);
+      else el.textContent = target.toFixed(decimals);
+    };
+    requestAnimationFrame(step);
+    counterObserver.unobserve(el);
+  });
+}, { threshold: 0.4 });
+counters.forEach(c => counterObserver.observe(c));
+
+function openLightbox(src) {
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+const discountMatrix = {
+  "0.10": { "10": 0.00, "9": 0.02, "8": 0.04, "7": 0.06, "6": 0.08, "5": 0.10 },
+  "0.15": { "10": 0.01, "9": 0.03, "8": 0.05, "7": 0.07, "6": 0.09, "5": 0.11 },
+  "0.20": { "10": 0.02, "9": 0.04, "8": 0.06, "7": 0.08, "6": 0.10, "5": 0.12 },
+  "0.25": { "10": 0.03, "9": 0.05, "8": 0.07, "7": 0.09, "6": 0.11, "5": 0.13 },
+  "0.30": { "10": 0.04, "9": 0.06, "8": 0.08, "7": 0.10, "6": 0.12, "5": 0.14 },
+  "0.35": { "10": 0.05, "9": 0.07, "8": 0.09, "7": 0.11, "6": 0.13, "5": 0.15 },
+  "0.40": { "10": 0.06, "9": 0.08, "8": 0.10, "7": 0.12, "6": 0.14, "5": 0.16 }
+};
+const fmt = (num) => num.toLocaleString('en-US', { maximumFractionDigits: 0 }) + ' <span class="currency">ج.م</span>';
+
+const yaruTemplates = [
+  { type: "Apartment A1", area: 152, garden: 0, price: 5130000, delivery: "2.5 سنة" },
+  { type: "Apartment A1", area: 150, garden: 0, price: 5850000, delivery: "2.5 سنة" },
+  { type: "Apartment A2", area: 157, garden: 54, price: 9445000, delivery: "4 سنوات" },
+  { type: "Apartment A2", area: 180, garden: 0, price: 8460000, delivery: "4 سنوات" },
+  { type: "Apartment A2", area: 167, garden: 0, price: 5970250, delivery: "4 سنوات" },
+  { type: "Apartment A4", area: 106, garden: 0, price: 4099868, delivery: "4 سنوات" },
+  { type: "Apartment A4", area: 119, garden: 0, price: 4513432, delivery: "2.5 سنة" },
+  { type: "Apartment A4", area: 117, garden: 0, price: 5908500, delivery: "4 سنوات" },
+  { type: "Apartment A5", area: 130, garden: 0, price: 4386590, delivery: "4 سنوات" },
+  { type: "Apartment A5", area: 120, garden: 0, price: 4641360, delivery: "4 سنوات" },
+  { type: "Apartment A6", area: 151.55, garden: 0, price: 6971300, delivery: "4 سنوات" },
+  { type: "Villa Town", area: 222, garden: 92, price: 16365000, delivery: "4 سنوات" }
+];
+
+const yaruInventory = [];
+for (let i = 1; i <= 116; i++) {
+  const tpl = yaruTemplates[i % yaruTemplates.length];
+  const bld = Math.floor(i / 10) + 1;
+  const code = `${bld}-${tpl.type.split(' ')[1]}-${(i % 90) + 10}`;
+  const variation = Math.floor(i / yaruTemplates.length) * 50000;
+  yaruInventory.push({ code, type: tpl.type, area: tpl.area, garden: tpl.garden, price: tpl.price + variation, delivery: tpl.delivery });
+}
+
+const yaruSelect = document.getElementById('yaruUnitSelect');
+yaruInventory.forEach(u => {
+  const opt = document.createElement('option');
+  opt.value = u.code;
+  opt.textContent = `${u.code} - ${u.type} (${u.area} م²)`;
+  yaruSelect.appendChild(opt);
+});
+
+function yaruCalc() {
+  const code = yaruSelect.value;
+  if (!code) return;
+  const unit = yaruInventory.find(u => u.code === code);
+  if (!unit) return;
+  const dp = document.getElementById('yaruDpSelect').value;
+  const years = document.getElementById('yaruYearsSelect').value;
+  const discount = discountMatrix[dp][years];
+  const basePrice = unit.price;
+  const finalPrice = basePrice * (1 - discount);
+  const dpAmount = finalPrice * parseFloat(dp);
+  const remaining = finalPrice - dpAmount;
+  const totalInst = parseInt(years) * 4;
+  const instAmount = remaining / totalInst;
+
+  document.getElementById('yaruResultsBox').classList.add('active');
+  document.getElementById('yaruUnitDetails').innerHTML = `
+    <span>🏢 نوع الوحدة: ${unit.type}</span>
+    <span>📐 المساحة: ${unit.area} م²</span>
+    ${unit.garden > 0 ? `<span>🌿 حديقة: ${unit.garden} م²</span>` : ''}
+    <span>⏳ الاستلام: ${unit.delivery}</span>
+  `;
+  document.getElementById('yaruBasePrice').innerHTML = fmt(basePrice);
+  document.getElementById('yaruFinalPrice').innerHTML = fmt(finalPrice);
+  document.getElementById('yaruDpAmount').innerHTML = fmt(dpAmount);
+  document.getElementById('yaruInstallmentAmount').innerHTML = fmt(instAmount);
+  document.getElementById('yaruNumInstallments').textContent = `${totalInst} قسط (ربع سنوي)`;
+  const badge = document.getElementById('yaruDiscountBadge');
+  if (discount > 0) { badge.style.display = 'inline-block'; badge.textContent = `خصم ${(discount*100).toFixed(0)}%`; }
+  else { badge.style.display = 'none'; }
+}
+yaruSelect.addEventListener('change', yaruCalc);
+document.getElementById('yaruDpSelect').addEventListener('change', yaruCalc);
+document.getElementById('yaruYearsSelect').addEventListener('change', yaruCalc);
+
+const bemaInventory = [
+  { no: 19, code: "F02", floor: "1st", type: "Commercial", area: 10, price: 1800000 },
+  { no: 20, code: "F02", floor: "1st", type: "Commercial", area: 10, price: 1800000 },
+  { no: 21, code: "F02", floor: "1st", type: "Commercial", area: 10, price: 1800000 },
+  { no: 22, code: "F02", floor: "1st", type: "Commercial", area: 10, price: 1800000 },
+  { no: 23, code: "F02", floor: "1st", type: "Commercial", area: 10, price: 1800000 },
+  { no: 24, code: "F02", floor: "1st", type: "Commercial", area: 10, price: 1800000 },
+  { no: 25, code: "F02", floor: "1st", type: "Commercial", area: 10, price: 1800000 },
+  { no: 26, code: "F02", floor: "1st", type: "Commercial", area: 10, price: 1800000 },
+  { no: 27, code: "F02", floor: "1st", type: "Commercial", area: 10, price: 1800000 },
+  { no: 28, code: "F02", floor: "1st", type: "Commercial", area: 10, price: 1800000 },
+  { no: 29, code: "F08A", floor: "1st", type: "Commercial", area: 102, price: 19890000 },
+  { no: 2, code: "G08", floor: "G", type: "Commercial", area: 10, price: 2550000 },
+  { no: 3, code: "G08", floor: "G", type: "Commercial", area: 10, price: 2550000 },
+  { no: 4, code: "G08", floor: "G", type: "Commercial", area: 10, price: 2550000 },
+  { no: 5, code: "G08", floor: "G", type: "Commercial", area: 10, price: 2550000 },
+  { no: 6, code: "G08", floor: "G", type: "Commercial", area: 10, price: 2550000 },
+  { no: 7, code: "G08", floor: "G", type: "Commercial", area: 10, price: 2550000 },
+  { no: 1, code: "G08", floor: "G", type: "Commercial", area: 12, price: 3060000 },
+  { no: 8, code: "G09", floor: "G", type: "Commercial", area: 68, price: 17680000 },
+  { no: 9, code: "G11", floor: "G", type: "Commercial", area: 48, price: 12480000 },
+  { no: 10, code: "G12", floor: "G", type: "Commercial", area: 48, price: 12480000 },
+  { no: 12, code: "G13", floor: "G", type: "Commercial", area: 10, price: 2600000 },
+  { no: 13, code: "G13", floor: "G", type: "Commercial", area: 10, price: 2600000 },
+  { no: 14, code: "G13", floor: "G", type: "Commercial", area: 10, price: 2600000 },
+  { no: 15, code: "G13", floor: "G", type: "Commercial", area: 10, price: 2600000 },
+  { no: 16, code: "G13", floor: "G", type: "Commercial", area: 10, price: 2600000 },
+  { no: 11, code: "G13", floor: "G", type: "Commercial", area: 11, price: 2860000 },
+  { no: 17, code: "G20", floor: "G", type: "Commercial", area: 58, price: 15080000 },
+  { no: 18, code: "G22", floor: "G", type: "Commercial", area: 53, price: 13780000 },
+  { no: 30, code: "TP2-10", floor: "2nd", type: "Office", area: 70, price: 4522000 },
+  { no: 33, code: "TP3-1", floor: "3rd", type: "Office", area: 67, price: 4455500 },
+  { no: 34, code: "TP3-22", floor: "3rd", type: "Office", area: 67, price: 4646450 },
+  { no: 35, code: "TP6-1", floor: "6th", type: "Office", area: 67, price: 6287280 },
+  { no: 44, code: "TP6-10", floor: "6th", type: "Office", area: 70, price: 6426000 },
+  { no: 46, code: "TP6-12", floor: "6th", type: "Office", area: 38, price: 3488400 },
+  { no: 47, code: "TP6-13", floor: "6th", type: "Office", area: 38, price: 3488400 },
+  { no: 48, code: "TP6-14", floor: "6th", type: "Office", area: 38, price: 3488400 },
+  { no: 49, code: "TP6-15", floor: "6th", type: "Office", area: 31, price: 2814180 },
+  { no: 50, code: "TP6-16", floor: "6th", type: "Office", area: 34, price: 3329280 },
+  { no: 51, code: "TP6-17", floor: "6th", type: "Office", area: 38, price: 3720960 },
+  { no: 52, code: "TP6-18", floor: "6th", type: "Office", area: 38, price: 3720960 },
+  { no: 53, code: "TP6-19", floor: "6th", type: "Office", area: 38, price: 3720960 },
+  { no: 36, code: "TP6-2", floor: "6th", type: "Office", area: 38, price: 3565920 },
+  { no: 54, code: "TP6-24", floor: "6th", type: "Office", area: 38, price: 3488400 },
+  { no: 56, code: "TP6-26", floor: "6th", type: "Office", area: 31, price: 2814180 },
+  { no: 37, code: "TP6-3", floor: "6th", type: "Office", area: 38, price: 3565920 },
+  { no: 38, code: "TP6-4", floor: "6th", type: "Office", area: 38, price: 3565920 },
+  { no: 39, code: "TP6-5", floor: "6th", type: "Office", area: 38, price: 3565920 },
+  { no: 40, code: "TP6-6", floor: "6th", type: "Office", area: 38, price: 3565920 },
+  { no: 41, code: "TP6-7", floor: "6th", type: "Office", area: 38, price: 3565920 },
+  { no: 42, code: "TP6-8", floor: "6th", type: "Office", area: 38, price: 3565920 },
+  { no: 43, code: "TP6-9", floor: "6th", type: "Office", area: 34, price: 3190560 },
+  { no: 57, code: "TP7-10", floor: "7th", type: "Clinic", area: 70, price: 6568800 },
+  { no: 58, code: "TP7-11", floor: "7th", type: "Clinic", area: 31, price: 2909040 },
+  { no: 59, code: "TP7-12", floor: "7th", type: "Clinic", area: 38, price: 3565920 },
+  { no: 60, code: "TP7-13", floor: "7th", type: "Clinic", area: 38, price: 3565920 },
+  { no: 61, code: "TP7-14", floor: "7th", type: "Clinic", area: 38, price: 3565920 },
+  { no: 62, code: "TP7-15", floor: "7th", type: "Clinic", area: 31, price: 2877420 },
+  { no: 64, code: "TP7-24", floor: "7th", type: "Clinic", area: 38, price: 3565920 },
+  { no: 65, code: "TP7-25", floor: "7th", type: "Clinic", area: 31, price: 2909040 },
+  { no: 66, code: "TP7-26", floor: "7th", type: "Clinic", area: 31, price: 2877420 }
+];
+
+const bemaSelect = document.getElementById('bemaUnitSelect');
+bemaInventory.forEach(u => {
+  const opt = document.createElement('option');
+  opt.value = `${u.code}-${u.no}`;
+  opt.textContent = `${u.code} (No. ${u.no}) - ${u.type} - ${u.area} م²`;
+  bemaSelect.appendChild(opt);
+});
+
+function bemaCalc() {
+  const sel = bemaSelect.value;
+  if (!sel) return;
+  const unit = bemaInventory.find(u => `${u.code}-${u.no}` === sel);
+  if (!unit) return;
+  const dpStr = document.getElementById('bemaDpSelect').value;
+  const yearsStr = document.getElementById('bemaYearsSelect').value;
+  const discount = discountMatrix[dpStr][yearsStr];
+  const dpPercent = parseFloat(dpStr);
+  const years = parseInt(yearsStr);
+
+  const basePrice = unit.price;
+  const finalPrice = basePrice * (1 - discount);
+  const dpAmount = finalPrice * dpPercent;
+  const remaining = finalPrice - dpAmount;
+  const totalInst = years * 4;
+  const instBefore = remaining / totalInst;
+  const totalYield = basePrice * 0.10;
+  const yieldPerInst = totalYield / totalInst;
+  const instAfter = instBefore - yieldPerInst;
+
+  document.getElementById('bemaResultsBox').classList.add('active');
+  document.getElementById('bemaUnitDetails').innerHTML = `
+    <span>🏢 النوع: ${unit.type}</span>
+    <span>🏢 الدور: ${unit.floor}</span>
+    <span>📐 المساحة: ${unit.area} م²</span>
+    <span>🔢 كود الوحدة: ${unit.code} (No. ${unit.no})</span>
+  `;
+  document.getElementById('bemaBasePrice').innerHTML = fmt(basePrice);
+  document.getElementById('bemaFinalPrice').innerHTML = fmt(finalPrice);
+  document.getElementById('bemaDpAmount').innerHTML = fmt(dpAmount);
+  document.getElementById('bemaInstallmentBefore').innerHTML = fmt(instBefore);
+  document.getElementById('bemaInstallmentAfter').innerHTML = fmt(instAfter);
+  document.getElementById('bemaTotalYield').innerHTML = fmt(totalYield);
+  document.getElementById('bemaNumInstallments').textContent = `${totalInst} قسط (ربع سنوي)`;
+  const badge = document.getElementById('bemaDiscountBadge');
+  if (discount > 0) { badge.style.display = 'inline-block'; badge.textContent = `خصم ${(discount*100).toFixed(0)}%`; }
+  else { badge.style.display = 'none'; }
+}
+bemaSelect.addEventListener('change', bemaCalc);
+document.getElementById('bemaDpSelect').addEventListener('change', bemaCalc);
+document.getElementById('bemaYearsSelect').addEventListener('change', bemaCalc);
+</script>
+
+</body>
+</html>
